@@ -21,7 +21,7 @@ service: routing3-usermgt-service
 frameworkVersion: '3'
 
 custom:
-  version: 1.0.41
+  version: 0.0.35
 
 plugins:
   - serverless-apigateway-route-settings
@@ -107,7 +107,7 @@ functions:
     vpc: # Optional VPC. But if you use VPC then both subproperties (securityGroupIds and subnetIds) are required
      securityGroupIds:
         - sg-067d40de060df307c
-      subnetIds:
+     subnetIds:
         - subnet-0dfeb4858abc763e3
         - subnet-00ed6dff2ee25ec3e
         - subnet-046c66898cb14cf60
