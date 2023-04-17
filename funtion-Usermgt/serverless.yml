@@ -112,7 +112,7 @@ functions:
         - subnet-00ed6dff2ee25ec3e
         - subnet-046c66898cb14cf60
     package:
-      artifact: UserManagement-dev-${self:custom.version}.zip
+      artifact: UserManagement-dev-${self:custom.version}-master.zip
                 
     timeout: 30
     events:
