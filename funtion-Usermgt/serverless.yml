@@ -35,8 +35,6 @@ provider:
   #   httpApi: true
   httpApi:
     payload: '1.0' #Or use 1.0
-    id: 
-      Fn::ImportValue: sls-launcher-reporter-service-staging-fr-HttpApiId
 
 # you can overwrite defaults here
 #  stage: staging-fr
