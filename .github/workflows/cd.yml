@@ -1,0 +1,51 @@
+name: Deploy function users-mgt to staging-vn
+on:
+  push:
+    branches: 
+      - main
+    paths:
+      - 'funtion-Usermgt/serverless.yml'
+      - '.github/workflows/cd.yml'
+
+env:
+  REPO_NAME: UserManagement-prod # {"$kpt-set":"app"}
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Install yq
+        run: |
+          sudo wget -O /usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ACCESSKEY }}
+          aws-secret-access-key: ${{ secrets.SECRET }}
+          aws-region: eu-central-1
+      
+      - name: Prepare Serverless framework #serverless/github-action can only be run frm the root directory.
+        run: mv funtion-Usermgt/serverless.yml .
+      
+      - name: Download Function zip to Runner
+        run: |
+          aws s3 cp s3://user-packages/UserManagement-dev-$(yq e '.custom.version' serverless.yml).zip .
+        env:
+          BUCKET: routing2-lambda-packages
+
+      - name: Deploy function to staging-vn
+        uses: serverless/github-action@master
+        with:
+          args: -c "serverless plugin install --name serverless-apigateway-route-settings && serverless deploy --stage staging-vn"
+          entrypoint: /bin/sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ACCESSKEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET }}
+          DB_USER: ""
+          DB_PASSWORD: ""
+          S3_BUCKET_NAME: ""
