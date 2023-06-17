@@ -21,7 +21,7 @@ service: routing3-usermgt-service
 frameworkVersion: '3'
 
 custom:
-  version: 0.0.44
+  version: 0.0.43
 
 plugins:
   - serverless-apigateway-route-settings
